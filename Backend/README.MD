@@ -12,3 +12,7 @@ Read This document
 simple import sort
 
 # Run With `npm start`
+
+# Added zod for request validation
+
+install -> `npm i zod`

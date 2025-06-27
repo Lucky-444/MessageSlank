@@ -23,5 +23,3 @@ export const signup = async (req, res) => {
       .json(internalErrorResponse(error));
   }
 };
-
-
