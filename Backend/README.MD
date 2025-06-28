@@ -16,3 +16,27 @@ simple import sort
 # Added zod for request validation
 
 install -> `npm i zod`
+
+# Postman Scripts (writing post response scripts in POSTMAN)
+
+1-> pre request
+2-> post request : ->
+
+go to global variable section
+create a authToken here
+intial value : authToken = '' {empty}
+
+inside postman -> pm is a global var
+for parsing the response you use
+`pm.response.json`
+
+we set the token as collectionVariables
+pm.collectionVariables.set("authToken" , pm.response.json());
+
+or
+
+{
+const jsonResponse = pm.response.json();
+console.log(jsonResponse.data);
+pm.collectionVariables.set('authToken', jsonResponse.data.token);
+}
