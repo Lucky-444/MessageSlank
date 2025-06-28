@@ -60,5 +60,3 @@ export const isAuthenticated = (req, res, next) => {
       .json(internalErrorResponse(error));
   }
 };
-
-
