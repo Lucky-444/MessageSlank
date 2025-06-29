@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
 
+import channelRepository from '../repositories/channelRepository.js';
 import WorkspaceRepository from '../repositories/workspaceRepository.js';
 import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
@@ -95,6 +96,56 @@ export const getWorkspaceUserIsMemberOfService = async (userId) => {
       });
     }
     return workspace;
+  } catch (error) {
+    console.log('workspace service error', error);
+    throw error;
+  }
+};
+
+export const deleteWorkspaceService = async (workspaceId, userId) => {
+  try {
+    //check if the user is the owner of the workspace
+    //we need to delete the workspace by finding the workspace by id
+
+    console.log('userId passed in:', userId, '| typeof:', typeof userId);
+    console.log('workspaceId passed in:', workspaceId, '| typeof:', typeof workspaceId);
+    
+
+    const workspace = await WorkspaceRepository.getById(workspaceId);
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid workspace ID',
+        message: 'No Workspace found with this ID',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+    const isAllowed = workspace.members.some(member => {
+      const memberId = (
+        member.memberId?._id ?? member.memberId
+      ).toString();
+      
+      return memberId === userId.toString() && member.role === 'admin';
+    });
+
+    console.log(isAllowed)
+
+    if (!isAllowed) {
+      throw new ClientError({
+        explanation:
+          'useer is either not a menber of the workspace or is not an admin',
+        message: 'You are not allowed to delete this workspace',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+
+    let workspaceDeleteResponse;
+    if (isAllowed) {
+      //workspace.channels --> provide you the channelIds of the workspace
+      await channelRepository.deleteMany(workspace.channels);
+      workspaceDeleteResponse = await WorkspaceRepository.delete(workspaceId);
+    }
+
+    return workspaceDeleteResponse;
   } catch (error) {
     console.log('workspace service error', error);
     throw error;

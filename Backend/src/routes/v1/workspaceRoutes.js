@@ -2,6 +2,7 @@ import express from 'express';
 
 import {
   createWorkspaceController,
+  deleteWorkspaceController,
   getWorkspaceUserIsMemberOfController
 } from '../../controllers/workspaceController.js';
 import { isAuthenticated } from '../../middlewares/authMiddleware.js';
@@ -27,9 +28,17 @@ router.post(
 // pass from req.body ==> {
 // userId -> in body
 //
-//
+// always loggedin
+// in header always send the x-access-token
+//that is came after login
 // }
 
 router.get('/', isAuthenticated, getWorkspaceUserIsMemberOfController);
+
+//pass from req.params ==> {
+//
+// }
+
+router.delete('/:workspaceId', isAuthenticated, deleteWorkspaceController);
 
 export default router;
