@@ -3,7 +3,7 @@ export const internalErrorResponse = (error) => {
     success: false,
     err: error,
     data: {},
-    message:  error.message ||  'Internal server Error'
+    message: error.message || 'Internal server Error'
   };
 };
 

@@ -1,6 +1,8 @@
+import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
 
 import WorkspaceRepository from '../repositories/workspaceRepository.js';
+import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
 
 export const createWorkspaceService = async (workspace) => {
@@ -46,7 +48,7 @@ export const createWorkspaceService = async (workspace) => {
     await WorkspaceRepository.addMemberToWorkspace(
       response._id,
       workspace.owner,
-      'admin' 
+      'admin'
     );
 
     const updatedWorkspace = await WorkspaceRepository.addChannelToWorkspace(
@@ -68,7 +70,7 @@ export const createWorkspaceService = async (workspace) => {
     //duplicate things
     //it is already present
 
-    if (error.code === 11000 && error.name === 'MongoServerError') {
+    if (error.name === 'MongoServerError' && error.code === 11000) {
       throw new ValidationError(
         {
           error: ['A Workspace will already exists']
@@ -77,6 +79,24 @@ export const createWorkspaceService = async (workspace) => {
       );
     }
 
+    throw error;
+  }
+};
+
+export const getWorkspaceUserIsMemberOfService = async (userId) => {
+  try {
+    const workspace =
+      await WorkspaceRepository.fetchAllWorkspaceByMemberID(userId);
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid user ID',
+        message: 'No Workspace found with this ID',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+    return workspace;
+  } catch (error) {
+    console.log('workspace service error', error);
     throw error;
   }
 };
