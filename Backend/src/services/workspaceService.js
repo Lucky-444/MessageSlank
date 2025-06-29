@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import WorkspaceRepository from '../repositories/workspaceRepository.js';
+import ValidationError from '../utils/errors/validationError.js';
 
 export const createWorkspaceService = async (workspace) => {
   //we have to create a joincode for our workspace the joincode must be unique
@@ -28,26 +29,54 @@ export const createWorkspaceService = async (workspace) => {
   //the created user should be admin of the workspace
 
   //we use mongoose pre save hook to add the default channel while creating the workspace
+  try {
+    const joinCode = uuidv4().substring(0, 6).toUpperCase();
 
-  const joinCode = uuidv4().substring(0, 6);
+    //   const isJoinCodeAlreadyPresent = await WorkspaceRepository.getWorkspaceByJoinCode(joinCode);
+    //   if (isJoinCodeAlreadyPresent) {
+    //     return createWorkspace(workspace);
+    //   }
 
-  //   const isJoinCodeAlreadyPresent = await WorkspaceRepository.getWorkspaceByJoinCode(joinCode);
-  //   if (isJoinCodeAlreadyPresent) {
-  //     return createWorkspace(workspace);
-  //   }
+    const response = await WorkspaceRepository.create({
+      name: workspace.name,
+      description: workspace.description,
+      joincode: joinCode
+    });
 
-  const response = await WorkspaceRepository.create({
-    name: workspace.name,
-    description: workspace.description,
-    joincode: joinCode
-  });
+    await WorkspaceRepository.addMemberToWorkspace(
+      response._id,
+      workspace.owner,
+      'admin' 
+    );
 
-  await WorkspaceRepository.addMemberToWorkspace(
-    response._id,
-    workspace.owner,
-    'admin'
-  );
+    const updatedWorkspace = await WorkspaceRepository.addChannelToWorkspace(
+      response._id,
+      'General'
+    );
+    return updatedWorkspace;
+  } catch (error) {
+    console.log('workspace service error', error);
+    if (error.name === 'ValidationError') {
+      throw new ValidationError(
+        {
+          error: error.errors
+        },
+        error.message
+      );
+    }
 
-  await WorkspaceRepository.addChannelToWorkspace(response._id, 'General');
-  return response;
+    //duplicate things
+    //it is already present
+
+    if (error.code === 11000 && error.name === 'MongoServerError') {
+      throw new ValidationError(
+        {
+          error: ['A Workspace will already exists']
+        },
+        'A Workspace with same name already exists'
+      );
+    }
+
+    throw error;
+  }
 };
