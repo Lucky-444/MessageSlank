@@ -51,21 +51,19 @@ const WorkspaceRepository = {
       });
     }
 
-    const isMemberedAlreadyPartOfWorkspace = Workspace.members.find(
-      (member) => {
-        member.memberId === memberId;
-      }
+    const isMemberedAlreadyPartOfWorkspace = workspace.members.find(
+      (member) => member.memberId === memberId
     );
 
     if (isMemberedAlreadyPartOfWorkspace) {
       throw new ClientError({
         explanation: 'Invalid userID sent from client',
-        message: ' user already Present with this ID',
+        message: 'User already present with this ID',
         statusCode: StatusCodes.FORBIDDEN
       });
     }
 
-    workspace.members.push({ memberId: memberId, role: role });
+    workspace.members.push({ memberId, role });
     await workspace.save();
     return workspace;
   },
@@ -81,7 +79,7 @@ const WorkspaceRepository = {
       });
     }
 
-    const isChannelAlreadyPartOfWorkspace = Workspace.channels.find(
+    const isChannelAlreadyPartOfWorkspace = workspace.channels.find(
       (channel) => {
         channel.name === channelName;
       }
@@ -104,9 +102,9 @@ const WorkspaceRepository = {
   },
 
   fetchAllWorkspaceByMemberID: async function (memberId) {
-    const workspaces = await Workspace.find({ 'members.memberId': memberId }).populate(
-      'members.memberId' , 'username' , 'avatar' ,'email'
-    );
+    const workspaces = await Workspace.find({
+      'members.memberId': memberId
+    }).populate('members.memberId', 'username', 'avatar', 'email');
     return workspaces;
   }
 };

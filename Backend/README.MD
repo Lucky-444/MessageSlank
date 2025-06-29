@@ -40,3 +40,15 @@ const jsonResponse = pm.response.json();
 console.log(jsonResponse.data);
 pm.collectionVariables.set('authToken', jsonResponse.data.token);
 }
+
+
+# UUID (universaly unique identifier) 
+read this blog => https://www.cockroachlabs.com/blog/what-is-a-uuid/
+
+
+<!-- for joincode we use UUID and not take the whole UUID String
+     we just parse out the first 6-chars from it
+     in that we can maintain our joincode always unique -->
+
+
+

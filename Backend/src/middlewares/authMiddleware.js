@@ -8,7 +8,7 @@ import {
   internalErrorResponse
 } from '../utils/common/responseObject.js';
 
-export const isAuthenticated = (req, res, next) => {
+export const isAuthenticated = async (req, res, next) => {
   try {
     const token = req.headers['x-access-token'];
     if (!token) {
@@ -31,7 +31,7 @@ export const isAuthenticated = (req, res, next) => {
       );
     }
 
-    const user = userRepository.getById(response.id);
+    const user = await userRepository.getById(response.id);
     if (!user) {
       return res.status(StatusCodes.FORBIDDEN).json(
         customErrorResponse({
@@ -41,7 +41,7 @@ export const isAuthenticated = (req, res, next) => {
       );
     }
 
-    req.user = user.id;
+    req.user = user._id;
 
     next();
   } catch (error) {
