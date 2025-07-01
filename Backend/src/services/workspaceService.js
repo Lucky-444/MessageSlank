@@ -5,6 +5,7 @@ import channelRepository from '../repositories/channelRepository.js';
 import WorkspaceRepository from '../repositories/workspaceRepository.js';
 import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
+import userRepository from '../repositories/userRepository.js';
 
 const isUserMemberOfTheWorkspace = (workspace, userId) => {
   return workspace.members.some((member) => {
@@ -12,12 +13,18 @@ const isUserMemberOfTheWorkspace = (workspace, userId) => {
     return memberId === userId.toString();
   });
 };
-// const isUserAdminOfTheWorkspace = (workspace, userId) => {
-//   return workspace.members.some((member) => {
-//     const memberId = (member.memberId?._id ?? member.memberId).toString();
-//     return memberId === userId.toString() && member.role === 'admin';
-//   });
-// };
+
+const isUserAdminOfTheWorkspace = (workspace, userId) => {
+  return workspace.members.some((member) => {
+    const memberId = (member.memberId?._id ?? member.memberId).toString();
+    return memberId === userId.toString() && member.role === 'admin';
+  });
+};
+const isChannelAlreadyPartOfTheWorkspace = (workspace, channelName) => {
+  return workspace.channels.some(
+    (channel) => channel.name.toLowerCase() === channelName.toLowerCase()
+  );
+};
 
 export const createWorkspaceService = async (workspace) => {
   //we have to create a joincode for our workspace the joincode must be unique
@@ -190,6 +197,174 @@ export const getWorkspaceService = async (workspaceId, userId) => {
     return workspace;
   } catch (error) {
     console.log('Get Workspace Service Error', error);
+    throw error;
+  }
+};
+
+export const getWorkspaceByJoinCodeService = async (joincode, userId) => {
+  try {
+    const workspace =
+      await WorkspaceRepository.getWorkspaceByJoinCode(joincode);
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid Join Code',
+        message: 'No Workspace found with this Join Code',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+    const isMember = isUserMemberOfTheWorkspace(workspace, userId);
+    if (!isMember) {
+      throw new ClientError({
+        explanation: 'User is Not a member of the Workspace',
+        message: 'User is unAuthorized',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+
+    return workspace;
+  } catch (error) {
+    console.log('Get WorkspaceBy Joincode Service Error', error);
+    throw error;
+  }
+};
+
+export const updateWorkspaceService = async (
+  workspaceId,
+  workspaceData,
+  userId
+) => {
+  try {
+    const workspace = await WorkspaceRepository.getById(workspaceId);
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid Workspace Id',
+        message: 'No Workspace found with this Id',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+    const isAdmin = isUserAdminOfTheWorkspace(workspace, userId);
+    if (!isAdmin) {
+      throw new ClientError({
+        explanation: 'User is Not a Admin of the Workspace',
+        message: 'User is unAuthorized',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+    const updatedWorkspace = await WorkspaceRepository.update(
+      workspaceId,
+      workspaceData
+    );
+    return updatedWorkspace;
+  } catch (error) {
+    console.log('update workspcae Service error', error);
+    throw error;
+  }
+};
+
+export const addMemberToWorkspaceService = async (
+  workspaceId,
+  memberId,
+  role,
+  userId
+) => {
+  try {
+    const workspace = await WorkspaceRepository.getById(workspaceId);
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid Workspace Id',
+        message: 'No Workspace found with this Id',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+
+    //before check if user is already a member of the workspace
+    //we check if the user is a validUser or not
+
+    const isValidUser = await userRepository.getById(memberId);
+
+    if (!isValidUser) {
+      throw new ClientError({
+        explanation: 'Invalid User ',
+        message: 'No User found with this Id',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+
+    const isMember = isUserMemberOfTheWorkspace(workspace, memberId);
+    if (isMember) {
+      throw new ClientError({
+        explanation: 'User is already a member of the Workspace',
+        message: 'User is already a member of the Workspace',
+        statusCode: StatusCodes.CONFLICT
+      });
+    }
+
+    const isAdmin = isUserAdminOfTheWorkspace(workspace, userId);
+    if (!isAdmin) {
+      throw new ClientError({
+        explanation: 'User is Not a Admin of the Workspace',
+        message: 'User is unAuthorized',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+
+    const response = await WorkspaceRepository.addMemberToWorkspace(
+      workspaceId,
+      memberId,
+      role
+    );
+
+    return response;
+  } catch (error) {
+    console.log('add member to workspace service error', error);
+    throw error;
+  }
+};
+
+export const addChannelToWorkspaceService = async (
+  workspaceId,
+  channelName,
+  userId
+) => {
+  try {
+    const workspace =
+      await WorkspaceRepository.getWorkspaceDetailsByid(workspaceId);
+
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'No Workspace  Found With this Id',
+        message: 'Workspace Not Found',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+
+    const isAdmin = isUserAdminOfTheWorkspace(workspace, userId);
+    if (!isAdmin) {
+      throw new ClientError({
+        explanation: 'User is Not a Admin of the Workspace',
+        message: 'User is unAuthorized',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+    const isChannelPartOfTheWorkspace = isChannelAlreadyPartOfTheWorkspace(
+      workspace,
+      channelName
+    );
+    if (isChannelPartOfTheWorkspace) {
+      throw new ClientError({
+        explanation: 'Channel is Already Part of the Workspace',
+        message: 'Channel is Already Part of the Workspace',
+        statusCode: StatusCodes.CONFLICT
+      });
+    }
+
+    const response = await WorkspaceRepository.addChannelToWorkspace(
+      workspaceId,
+      channelName
+    );
+    return response;
+  } catch (error) {
+    console.log('addChannelToWorkspaceEroor ', error);
     throw error;
   }
 };

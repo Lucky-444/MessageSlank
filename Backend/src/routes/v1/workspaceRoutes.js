@@ -1,10 +1,14 @@
 import express from 'express';
 
 import {
+  addChannelToWorkspaceController,
+  addMemberToWorkspaceController,
   createWorkspaceController,
   deleteWorkspaceController,
+  getWorkspaceByJoinCodeController,
   getWorkspaceController,
-  getWorkspaceUserIsMemberOfController
+  getWorkspaceUserIsMemberOfController,
+  updateWorkspaceController
 } from '../../controllers/workspaceController.js';
 import { isAuthenticated } from '../../middlewares/authMiddleware.js';
 import { workspaceSchema } from '../../validators/workspaceSchema.js';
@@ -47,5 +51,43 @@ router.delete('/:workspaceId', isAuthenticated, deleteWorkspaceController);
 // }
 
 router.get('/:workspaceId', isAuthenticated, getWorkspaceController);
+
+//pass from req.params ==> {
+// mongo joincode
+//and header -> pass x-access-token
+// }
+router.get(
+  '/join/:joinCode',
+  isAuthenticated,
+  getWorkspaceByJoinCodeController
+);
+
+//pass from req.params ==>{
+//mongo WorkspaceId
+//and header -> pass x-access-token
+// }
+router.put('/:workspaceId', isAuthenticated, updateWorkspaceController);
+
+//pass from req.params ==>{
+//mongo WorkspaceId
+//and header -> pass x-access-token
+//req.body ==> {
+// memberId =
+//role =
+// }
+// }
+router.put('/:workspaceId/members' ,isAuthenticated , addMemberToWorkspaceController)
+
+
+
+//pass from req.params ==>{
+//mongo WorkspaceId
+//and header -> pass x-access-token
+//req.body ==> {
+//channelName =
+// }
+// }
+
+router.put('/:workspaceId/channels' , isAuthenticated , addChannelToWorkspaceController);
 
 export default router;
