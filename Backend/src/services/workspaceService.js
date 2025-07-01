@@ -6,6 +6,19 @@ import WorkspaceRepository from '../repositories/workspaceRepository.js';
 import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
 
+const isUserMemberOfTheWorkspace = (workspace, userId) => {
+  return workspace.members.some((member) => {
+    const memberId = (member.memberId?._id ?? member.memberId).toString();
+    return memberId === userId.toString();
+  });
+};
+// const isUserAdminOfTheWorkspace = (workspace, userId) => {
+//   return workspace.members.some((member) => {
+//     const memberId = (member.memberId?._id ?? member.memberId).toString();
+//     return memberId === userId.toString() && member.role === 'admin';
+//   });
+// };
+
 export const createWorkspaceService = async (workspace) => {
   //we have to create a joincode for our workspace the joincode must be unique
   //after creating the joincode we check
@@ -108,8 +121,12 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
     //we need to delete the workspace by finding the workspace by id
 
     console.log('userId passed in:', userId, '| typeof:', typeof userId);
-    console.log('workspaceId passed in:', workspaceId, '| typeof:', typeof workspaceId);
-    
+    console.log(
+      'workspaceId passed in:',
+      workspaceId,
+      '| typeof:',
+      typeof workspaceId
+    );
 
     const workspace = await WorkspaceRepository.getById(workspaceId);
     if (!workspace) {
@@ -119,15 +136,13 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
         statusCode: StatusCodes.NOT_FOUND
       });
     }
-    const isAllowed = workspace.members.some(member => {
-      const memberId = (
-        member.memberId?._id ?? member.memberId
-      ).toString();
-      
+    const isAllowed = workspace.members.some((member) => {
+      const memberId = (member.memberId?._id ?? member.memberId).toString();
+
       return memberId === userId.toString() && member.role === 'admin';
     });
 
-    console.log(isAllowed)
+    console.log(isAllowed);
 
     if (!isAllowed) {
       throw new ClientError({
@@ -148,6 +163,33 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
     return workspaceDeleteResponse;
   } catch (error) {
     console.log('workspace service error', error);
+    throw error;
+  }
+};
+
+export const getWorkspaceService = async (workspaceId, userId) => {
+  try {
+    const workspace = await WorkspaceRepository.getById(workspaceId);
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid Workspace ID',
+        message: 'No Workspace found with this ID',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+
+    const isMember = isUserMemberOfTheWorkspace(workspace, userId);
+    if (!isMember) {
+      throw new ClientError({
+        explanation: 'User is Not a member of the Workspace',
+        message: 'User is unAuthorized',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+
+    return workspace;
+  } catch (error) {
+    console.log('Get Workspace Service Error', error);
     throw error;
   }
 };
