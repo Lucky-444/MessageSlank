@@ -67,6 +67,20 @@ and copy the password and paste it int .env ,
 and export it in serverconfig.js
 
 
+# message queue
+reddis install redis from
+`https://github.com/tporadowski/redis/releases`
+
+we use redis as queuing system
+
+to interact with redis we use 
+`npm i ioredis` and `npm i bull`
+
+ioredis -> helps in redis connection
+bull-> helps in queuing system
+
+you can add how many attempts you want for adding of mail in queue
+add `retry in bullmq`
 
 
 

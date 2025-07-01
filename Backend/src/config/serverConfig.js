@@ -14,5 +14,5 @@ export const JWT_SECRET = process.env.JWT_SECRET;
 export const MAIL_ID = process.env.MAIL_ID;
 export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 
-console.log('MAIL_ID:', MAIL_ID);
-console.log('MAIL_PASSWORD:', MAIL_PASSWORD ? 'Exists' : 'Missing');
+export const REDIS_HOST = process.env.REDIS_HOST;
+export const REDIS_PORT = process.env.REDIS_PORT;
