@@ -1,13 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
 
+import { addEmailToMailQueue } from '../producer/mailQueueProducers.js';
 import channelRepository from '../repositories/channelRepository.js';
 import userRepository from '../repositories/userRepository.js';
 import WorkspaceRepository from '../repositories/workspaceRepository.js';
+import { mailObject } from '../utils/common/mailObject.js';
 import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
-import { addEmailToMailQueue } from '../producer/mailQueueProducers.js';
-import { mailObject } from '../utils/common/mailObject.js';
 
 export const isUserMemberOfTheWorkspace = (workspace, userId) => {
   return workspace.members.some((member) => {

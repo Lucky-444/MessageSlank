@@ -83,5 +83,10 @@ you can add how many attempts you want for adding of mail in queue
 add `retry in bullmq`
 
 
+# add bullboard express
+`npm i @bull-board/express`
+
+
+
 
 
