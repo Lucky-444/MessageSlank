@@ -4,6 +4,7 @@ const { StatusCodes } = httpStatus;
 import connectDB from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
 import apiRouter from './routes/apiRoutes.js';
+import bullServerAdapter from './config/bullboardConfig.js';
 
 
 const app = express();
@@ -14,6 +15,8 @@ app.use(
     extended: true
   })
 );
+
+app.use('/ui' , bullServerAdapter.getRouter())
 
 app.use('/api', apiRouter);
 
