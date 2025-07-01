@@ -7,7 +7,7 @@ import WorkspaceRepository from '../repositories/workspaceRepository.js';
 import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
 
-const isUserMemberOfTheWorkspace = (workspace, userId) => {
+export const isUserMemberOfTheWorkspace = (workspace, userId) => {
   return workspace.members.some((member) => {
     const memberId = (member.memberId?._id ?? member.memberId).toString();
     return memberId === userId.toString();

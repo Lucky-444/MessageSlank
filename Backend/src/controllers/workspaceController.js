@@ -173,6 +173,7 @@ export const addMemberToWorkspaceController = async (req, res) => {
       .json(internalErrorResponse(error, error.message));
   }
 };
+
 export const addChannelToWorkspaceController = async (req, res) => {
   try {
     const response = await addChannelToWorkspaceService(
