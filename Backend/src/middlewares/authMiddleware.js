@@ -41,10 +41,8 @@ export const isAuthenticated = async (req, res, next) => {
       );
     }
 
-    
     req.user = user._id;
 
-    
     next();
   } catch (error) {
     console.log('Auth Middleware Error', error);

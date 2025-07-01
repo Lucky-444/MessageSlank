@@ -100,7 +100,10 @@ const WorkspaceRepository = {
     }
 
     //if not part of workspace then  we create a new channel for it
-    const channel = await channelRepository.create({ name: channelName });
+    const channel = await channelRepository.create({
+      name: channelName,
+      workspaceId: workspaceId
+    });
 
     workspace.channels.push(channel);
     await workspace.save();

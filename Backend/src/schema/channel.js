@@ -4,22 +4,14 @@ const channelSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Channel name is required']
-    // unique: [true, 'Channel name already exists'],
-    // match: [
-    //     // eslint-disable-next-line no-useless-escape
-    //     /^[a-zA-Z0-9]+$/,
-    //     'Channel name should only contain letters and numbers'
-    // ]
+  },
+  workspaceId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Workspace',
+    required: [true, 'Workspace ID is required']
   }
-  //     description: {
-  //         type: String,
-  //         required: [true, 'Channel description is required'],
-  //         match: [
-  //             // eslint-disable-next-line no-useless-escape
-  //             /^[a-zA-Z0-9]+$/,
-  //             'Channel description should only contain letters and numbers'
-  //         ]
-  //     },
+},{
+  timestamps: true
 });
 
 const Channel = mongoose.model('Channel', channelSchema);

@@ -11,7 +11,7 @@ import {
   updateWorkspaceController
 } from '../../controllers/workspaceController.js';
 import { isAuthenticated } from '../../middlewares/authMiddleware.js';
-import { workspaceSchema } from '../../validators/workspaceSchema.js';
+import { addChannelToWorkspaceSchema, addMemberToWorkspaceSchema, workspaceSchema } from '../../validators/workspaceSchema.js';
 import { validate } from '../../validators/zodValidator.js';
 
 const router = express.Router();
@@ -76,9 +76,12 @@ router.put('/:workspaceId', isAuthenticated, updateWorkspaceController);
 //role =
 // }
 // }
-router.put('/:workspaceId/members' ,isAuthenticated , addMemberToWorkspaceController)
-
-
+router.put(
+  '/:workspaceId/members',
+  isAuthenticated,
+  validate(addMemberToWorkspaceSchema),
+  addMemberToWorkspaceController
+);
 
 //pass from req.params ==>{
 //mongo WorkspaceId
@@ -88,6 +91,11 @@ router.put('/:workspaceId/members' ,isAuthenticated , addMemberToWorkspaceContro
 // }
 // }
 
-router.put('/:workspaceId/channels' , isAuthenticated , addChannelToWorkspaceController);
+router.put(
+  '/:workspaceId/channels',
+  isAuthenticated,
+  validate(addChannelToWorkspaceSchema),
+  addChannelToWorkspaceController
+);
 
 export default router;
