@@ -51,4 +51,23 @@ read this blog => https://www.cockroachlabs.com/blog/what-is-a-uuid/
      in that we can maintain our joincode always unique -->
 
 
+# Nodemailer 
+install -> it
+`npm i nodemailer`
+
+read this blog => https://medium.com/@y.mehnati_49486/how-to-send-an-email-from-your-gmail-account-with-nodemailer-837bf09a7628
+
+
+first of all goto the mail and do two-step-verification of mail on
+and then go this url
+`https://myaccount.google.com/apppasswords?pli=1&rapt=AEjHL4MRl4MIvcOttEg7UG95BSXYERt3jqGekjCHQ2yx3tFJZXyBZsAEgcNhjm_aMCwDXOOgKwnJ8Sj5hWZMSY7Ep_c6ruOx_-93b3SEFeZczYDldrYUE4A`
+
+and then create a new app password 
+and copy the password and paste it int .env , 
+and export it in serverconfig.js
+
+
+
+
+
 
