@@ -15,7 +15,7 @@ export const getMessagesController = async (req, res) => {
       },
       req.query.page || 5,
       req.query.limit || 20,
-      req.user,
+      req.user
     );
     return res
       .status(StatusCodes.OK)

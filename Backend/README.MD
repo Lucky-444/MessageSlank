@@ -188,4 +188,8 @@ Read this Blog --> https://mongoosejs.com/docs/2.7.x/docs/indexes.html
 ## implemnt the ***getMessages of a channel in a paginated fashion***
 
 
-## webSocket
+## webSocket -> 
+Read the Blog = https://socket.io/docs/v4/tutorial/step-3
+
+Read How to send websocket in postman -> https://learning.postman.com/docs/sending-requests/websocket/websocket-overview/
+
