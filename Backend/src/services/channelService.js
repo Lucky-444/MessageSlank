@@ -6,8 +6,7 @@ import { isUserMemberOfTheWorkspace } from './workspaceService.js';
 
 export const getChannelByIdService = async (channelId, userId) => {
   try {
-    const channel =
-      await channelRepository.getChannelWithWorkspaceDetails(channelId);
+    const channel = await channelRepository.getChannelWithWorkspaceDetails(channelId);
 
     if (!channel || !channel.workspaceId) {
       throw new ClientError({
@@ -17,10 +16,7 @@ export const getChannelByIdService = async (channelId, userId) => {
       });
     }
 
-    const isUserPartOfWorkspace = isUserMemberOfTheWorkspace(
-      channel.workspaceId,
-      userId
-    );
+    const isUserPartOfWorkspace = isUserMemberOfTheWorkspace(channel.workspaceId, userId);
     if (!isUserPartOfWorkspace) {
       throw new ClientError({
         message:

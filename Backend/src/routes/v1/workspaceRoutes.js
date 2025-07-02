@@ -27,12 +27,7 @@ const router = express.Router();
 //which is came after signin or login
 // }
 
-router.post(
-  '/',
-  isAuthenticated,
-  validate(workspaceSchema),
-  createWorkspaceController
-);
+router.post('/', isAuthenticated, validate(workspaceSchema), createWorkspaceController);
 
 // pass from req.body ==> {
 // userId -> in body
@@ -60,11 +55,7 @@ router.get('/:workspaceId', isAuthenticated, getWorkspaceController);
 // mongo joincode
 //and header -> pass x-access-token
 // }
-router.get(
-  '/join/:joinCode',
-  isAuthenticated,
-  getWorkspaceByJoinCodeController
-);
+router.get('/join/:joinCode', isAuthenticated, getWorkspaceByJoinCodeController);
 
 //pass from req.params ==>{
 //mongo WorkspaceId

@@ -4,7 +4,6 @@ import { ExpressAdapter } from '@bull-board/express';
 
 import mailQueue from '../queues/mailQueue.js';
 
-
 const bullServerAdapter = new ExpressAdapter();
 bullServerAdapter.setBasePath('/ui');
 

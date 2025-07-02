@@ -1,4 +1,5 @@
 import Queue from 'bull';
+
 import { REDIS_HOST, REDIS_PORT } from '../config/serverConfig.js';
 const mailQueue = new Queue('mail', {
   redis: {

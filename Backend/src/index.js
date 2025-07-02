@@ -1,11 +1,10 @@
 import express from 'express';
 import httpStatus from 'http-status-codes';
 const { StatusCodes } = httpStatus;
+import bullServerAdapter from './config/bullboardConfig.js';
 import connectDB from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
 import apiRouter from './routes/apiRoutes.js';
-import bullServerAdapter from './config/bullboardConfig.js';
-
 
 const app = express();
 
@@ -16,7 +15,7 @@ app.use(
   })
 );
 
-app.use('/ui' , bullServerAdapter.getRouter())
+app.use('/ui', bullServerAdapter.getRouter());
 
 app.use('/api', apiRouter);
 
