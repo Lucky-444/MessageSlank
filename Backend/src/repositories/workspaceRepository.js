@@ -75,7 +75,8 @@ const WorkspaceRepository = {
   },
 
   addChannelToWorkspace: async function (workspaceId, channelName) {
-    const workspace = await Workspace.findById(workspaceId).populate('channels');
+    const workspace =
+      await Workspace.findById(workspaceId).populate('channels');
     if (!workspace) {
       throw new ClientError({
         explanation: 'Invalid workspace ID',
@@ -84,9 +85,11 @@ const WorkspaceRepository = {
       });
     }
 
-    const isChannelAlreadyPartOfWorkspace = workspace.channels.find((channel) => {
-      channel.name === channelName;
-    });
+    const isChannelAlreadyPartOfWorkspace = workspace.channels.find(
+      (channel) => {
+        channel.name === channelName;
+      }
+    );
 
     if (isChannelAlreadyPartOfWorkspace) {
       throw new ClientError({

@@ -1,9 +1,14 @@
+import { StatusCodes } from 'http-status-codes';
+
 import userRepository from '../repositories/userRepository.js';
 import WorkspaceRepository from '../repositories/workspaceRepository.js';
 import ClientError from '../utils/errors/clientError.js';
 import { isUserMemberOfTheWorkspace } from './workspaceService.js';
 
-export const isMemberPartOfTheWorkspaceService = async (workspaceId, memberId) => {
+export const isMemberPartOfTheWorkspaceService = async (
+  workspaceId,
+  memberId
+) => {
   try {
     const workspace = await WorkspaceRepository.getById(workspaceId);
     if (!workspace) {
@@ -30,7 +35,6 @@ export const isMemberPartOfTheWorkspaceService = async (workspaceId, memberId) =
         statusCode: StatusCodes.NOT_FOUND
       });
     }
-
 
     return user;
   } catch (error) {

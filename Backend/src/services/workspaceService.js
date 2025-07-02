@@ -108,7 +108,8 @@ export const createWorkspaceService = async (workspace) => {
 
 export const getWorkspaceUserIsMemberOfService = async (userId) => {
   try {
-    const workspace = await WorkspaceRepository.fetchAllWorkspaceByMemberID(userId);
+    const workspace =
+      await WorkspaceRepository.fetchAllWorkspaceByMemberID(userId);
     if (!workspace) {
       throw new ClientError({
         explanation: 'Invalid user ID',
@@ -129,7 +130,12 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
     //we need to delete the workspace by finding the workspace by id
 
     console.log('userId passed in:', userId, '| typeof:', typeof userId);
-    console.log('workspaceId passed in:', workspaceId, '| typeof:', typeof workspaceId);
+    console.log(
+      'workspaceId passed in:',
+      workspaceId,
+      '| typeof:',
+      typeof workspaceId
+    );
 
     const workspace = await WorkspaceRepository.getById(workspaceId);
     if (!workspace) {
@@ -149,7 +155,8 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
 
     if (!isAllowed) {
       throw new ClientError({
-        explanation: 'useer is either not a menber of the workspace or is not an admin',
+        explanation:
+          'useer is either not a menber of the workspace or is not an admin',
         message: 'You are not allowed to delete this workspace',
         statusCode: StatusCodes.UNAUTHORIZED
       });
@@ -198,7 +205,8 @@ export const getWorkspaceService = async (workspaceId, userId) => {
 
 export const getWorkspaceByJoinCodeService = async (joincode, userId) => {
   try {
-    const workspace = await WorkspaceRepository.getWorkspaceByJoinCode(joincode);
+    const workspace =
+      await WorkspaceRepository.getWorkspaceByJoinCode(joincode);
     if (!workspace) {
       throw new ClientError({
         explanation: 'Invalid Join Code',
@@ -222,7 +230,11 @@ export const getWorkspaceByJoinCodeService = async (joincode, userId) => {
   }
 };
 
-export const updateWorkspaceService = async (workspaceId, workspaceData, userId) => {
+export const updateWorkspaceService = async (
+  workspaceId,
+  workspaceData,
+  userId
+) => {
   try {
     const workspace = await WorkspaceRepository.getById(workspaceId);
     if (!workspace) {
@@ -240,7 +252,10 @@ export const updateWorkspaceService = async (workspaceId, workspaceData, userId)
         statusCode: StatusCodes.UNAUTHORIZED
       });
     }
-    const updatedWorkspace = await WorkspaceRepository.update(workspaceId, workspaceData);
+    const updatedWorkspace = await WorkspaceRepository.update(
+      workspaceId,
+      workspaceData
+    );
     return updatedWorkspace;
   } catch (error) {
     console.log('update workspcae Service error', error);
@@ -314,9 +329,14 @@ export const addMemberToWorkspaceService = async (
   }
 };
 
-export const addChannelToWorkspaceService = async (workspaceId, channelName, userId) => {
+export const addChannelToWorkspaceService = async (
+  workspaceId,
+  channelName,
+  userId
+) => {
   try {
-    const workspace = await WorkspaceRepository.getWorkspaceDetailsByid(workspaceId);
+    const workspace =
+      await WorkspaceRepository.getWorkspaceDetailsByid(workspaceId);
 
     if (!workspace) {
       throw new ClientError({

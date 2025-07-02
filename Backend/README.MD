@@ -165,4 +165,27 @@ Let me know if you want a visual analogy or code walkthrough.
 #### Must Read->  ***adapter design pattern*** { LLD }
 
 
+### for message Body --<>
 
+it is already very heavy and much more amount of data in it
+hence searching a particluar things in message body is take more time 
+
+how can we optimize it
+
+use -> 
+      ***elastic search***
+this a very power full tool 
+if any point of time you want to do a full text search(some kind of full text search)
+then elastic search shoulbe a way to go 
+its a very highly scalable
+it helps a lot if you search a humongous search activity
+
+Read the blog-> https://www.elastic.co/elasticsearch
+
+## creating Unique index
+Read this Blog --> https://mongoosejs.com/docs/2.7.x/docs/indexes.html
+
+## implemnt the ***getMessages of a channel in a paginated fashion***
+
+
+## webSocket

@@ -21,7 +21,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Name is required'],
       unique: [true, 'Username already exists'],
-      match: [/^[a-zA-Z0-9]+$/, 'Username should only contain letters and numbers']
+      match: [
+        /^[a-zA-Z0-9]+$/,
+        'Username should only contain letters and numbers'
+      ]
     },
     avatar: {
       type: String
