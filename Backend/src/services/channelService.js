@@ -43,14 +43,14 @@ export const getChannelByIdService = async (channelId, userId) => {
     //making our custom response object
     const response = {
       channel: channel,
-      messages: message,
+      messages: message
       // _id : channelId,
       // name : channel.name,
       // workspaceId : channel.workspaceId,
       // createdAt : channel.createdAt,
       // updatedAt : channel.updatedAt
     };
-    
+
     return response;
   } catch (error) {
     console.log('Get Channel By ID Error', error);
