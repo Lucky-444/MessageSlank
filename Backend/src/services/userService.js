@@ -63,7 +63,7 @@ export const signInService = async (data) => {
       avatar: user.avatar,
       email: user.email,
       token: token,
-      _id  : user._id,
+      _id: user._id
     };
   } catch (error) {
     console.log('User Signin Eroor', error);
