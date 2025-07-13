@@ -1,9 +1,9 @@
 import express from 'express';
 import httpStatus from 'http-status-codes';
 const { StatusCodes } = httpStatus;
+import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import cors from 'cors';
 
 import bullServerAdapter from './config/bullboardConfig.js';
 import connectDB from './config/dbConfig.js';
@@ -15,7 +15,6 @@ import apiRouter from './routes/apiRoutes.js';
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
-
 
 app.use(cors());
 
