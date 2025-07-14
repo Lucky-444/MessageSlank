@@ -8,6 +8,7 @@ import {
   getWorkspaceByJoinCodeController,
   getWorkspaceController,
   getWorkspaceUserIsMemberOfController,
+  resetWorkspaceJoincodeController,
   updateWorkspaceController
 } from '../../controllers/workspaceController.js';
 import { isAuthenticated } from '../../middlewares/authMiddleware.js';
@@ -101,5 +102,17 @@ router.put(
   validate(addChannelToWorkspaceSchema),
   addChannelToWorkspaceController
 );
+
+//pass from req.params ==>{
+//mongo WorkspaceId
+//and header -> pass x-access-token
+// }
+
+router.put(
+  '/:workspaceId/joinCode/reset',
+  isAuthenticated,
+  resetWorkspaceJoincodeController
+);
+
 
 export default router;
