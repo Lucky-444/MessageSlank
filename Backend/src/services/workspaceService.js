@@ -178,7 +178,7 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
 
 export const getWorkspaceService = async (workspaceId, userId) => {
   try {
-    const workspace = await WorkspaceRepository.getById(workspaceId);
+    const workspace = await WorkspaceRepository.getWorkspaceDetailsByid(workspaceId);
     if (!workspace) {
       throw new ClientError({
         explanation: 'Invalid Workspace ID',
