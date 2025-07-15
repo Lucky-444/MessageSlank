@@ -8,6 +8,7 @@ import {
   getWorkspaceByJoinCodeController,
   getWorkspaceController,
   getWorkspaceUserIsMemberOfController,
+  joinWorkspaceController,
   resetWorkspaceJoincodeController,
   updateWorkspaceController
 } from '../../controllers/workspaceController.js';
@@ -68,6 +69,15 @@ router.get(
 );
 
 //pass from req.params ==>{
+//mongo WorkspaceId,
+//and joinCode also
+//userId
+//and header -> pass x-access-token
+// }
+
+router.put('/:workspaceId/join', isAuthenticated, joinWorkspaceController);
+
+//pass from req.params ==>{
 //mongo WorkspaceId
 //and header -> pass x-access-token
 // }
@@ -114,5 +124,11 @@ router.put(
   resetWorkspaceJoincodeController
 );
 
+//pass from req.params ==>{
+//mongo WorkspaceId,
+//and joinCode also
+//userId
+//and header -> pass x-access-token
+// }
 
 export default router;

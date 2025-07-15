@@ -392,3 +392,89 @@ export const addChannelToWorkspaceService = async (
     throw error;
   }
 };
+
+//You can try this one also
+
+// export const joinWorkspaceService = async (joinCode, userId ) => {
+//   try {
+//     const workspace =
+//       await WorkspaceRepository.getWorkspaceByJoinCode(joinCode);
+//     if (!workspace) {
+//       throw new ClientError({
+//         explanation: 'Invalid Join Code',
+//         message: 'No Workspace found with this Join Code',
+//         statusCode: StatusCodes.NOT_FOUND
+//       });
+//     }
+
+//     const isMember = isUserMemberOfTheWorkspace(workspace, userId);
+//     if (isMember) {
+//       throw new ClientError({
+//         explanation: 'User is already a member of the Workspace',
+//         message: 'User is already a member of the Workspace',
+//         statusCode: StatusCodes.CONFLICT
+//       });
+//     }
+
+//     const response = await WorkspaceRepository.addMemberToWorkspace(
+//       workspace._id,
+//       userId,
+//       'member'
+//     );
+
+//     //add here mail Queue object
+//     addEmailToMailQueue({
+//       ...mailObject(workspace),
+//       to: response.memberId.email
+//     });
+
+//     return response;
+//   } catch (error) {
+//     console.log('joinWorkspaceService Error', error);
+//     throw error;
+//   }
+// }
+
+export const joinWorkspaceService = async (joinCode, userId, workspaceId) => {
+  try {
+    const workspace =
+      await WorkspaceRepository.getWorkspaceDetailsByid(workspaceId);
+    console.log('WorkspaceId ->', workspaceId);
+    console.log('workspace ==>', workspace);
+
+    if (!workspace) {
+      throw new ClientError({
+        explanation: 'Invalid Join Code',
+        message: 'No Workspace found with this Join Code',
+        statusCode: StatusCodes.NOT_FOUND
+      });
+    }
+    const isMember = isUserMemberOfTheWorkspace(workspace, userId);
+    if (isMember) {
+      throw new ClientError({
+        explanation: 'User is already a member of the Workspace',
+        message: 'User is already a member of the Workspace',
+        statusCode: StatusCodes.CONFLICT
+      });
+    }
+
+    if (workspace.joincode !== joinCode) {
+      throw new ClientError({
+        explanation: 'JoinCode is Not Valid',
+        message: 'Join COde may be expired or not valid one',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
+
+    const updatedWorkspace = await WorkspaceRepository.addMemberToWorkspace(
+      workspace._id,
+      userId,
+      'member'
+    );
+
+    return updatedWorkspace;
+  } catch (error) {
+    console.log('joinWorkspaceService Error', error);
+    throw error;
+  }
+};

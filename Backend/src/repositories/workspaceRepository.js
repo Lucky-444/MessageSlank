@@ -58,7 +58,10 @@ const WorkspaceRepository = {
     }
 
     const isMemberedAlreadyPartOfWorkspace = workspace.members.find(
-      (member) => member.memberId === memberId
+      (member) => {
+        console.log('MemberId ->', memberId);
+        member.memberId?._id.toString() === memberId.toString();
+      }
     );
 
     if (isMemberedAlreadyPartOfWorkspace) {
