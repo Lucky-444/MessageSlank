@@ -231,7 +231,7 @@ export const resetWorkspaceJoincodeController = async (req, res) => {
 
 export const joinWorkspaceController = async (req, res) => {
   try {
-    const  workspaceId = req.params.workspaceId;
+    const workspaceId = req.params.workspaceId;
     const joinCode = req.body.joinCode;
     console.log('From Controller WorkspaceId', workspaceId);
 
@@ -258,3 +258,4 @@ export const joinWorkspaceController = async (req, res) => {
       .json(internalErrorResponse(error, error.message));
   }
 };
+

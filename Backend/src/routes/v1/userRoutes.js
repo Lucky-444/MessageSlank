@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { signin, signup } from '../../controllers/userController.js';
+import { signin, signup, verifyEmailController } from '../../controllers/userController.js';
 import {
   userSigninSchema,
   userSignupSchema
@@ -16,5 +16,7 @@ const router = express.Router();
 router.post('/signup', validate(userSignupSchema), signup);
 
 router.post('/signin', validate(userSigninSchema), signin);
+
+
 
 export default router;

@@ -11,6 +11,7 @@ import { PORT } from './config/serverConfig.js';
 import channelSocketHandler from './controllers/channelSocketController.js';
 import messageSocketHandler from './controllers/messageSocketController.js';
 import apiRouter from './routes/apiRoutes.js';
+import { verifyEmailController } from './controllers/userController.js';
 
 const app = express();
 const server = createServer(app);
@@ -28,6 +29,9 @@ app.use(
 app.use('/ui', bullServerAdapter.getRouter());
 
 app.use('/api', apiRouter);
+
+app.get('/verify/:token', verifyEmailController);
+
 
 app.get('/ping', (req, res) => {
   return res.status(StatusCodes.OK).json({ message: 'Pong', success: true });
