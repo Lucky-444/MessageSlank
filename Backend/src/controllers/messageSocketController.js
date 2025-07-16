@@ -14,7 +14,7 @@ export default function messageHandler(io, socket) {
 
       io.to(channelId).emit(NEW_MESSAGE_RECEVIED_EVENT, messageResponse);
       // socket.broadcast.emit(NEW_MESSAGE_RECEVIED_EVENT, messageResponse);
-      cb({
+      cb?.({
         message: 'SuccessFully created the message',
         success: true,
         data: messageResponse

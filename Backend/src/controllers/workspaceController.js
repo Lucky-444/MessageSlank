@@ -258,4 +258,3 @@ export const joinWorkspaceController = async (req, res) => {
       .json(internalErrorResponse(error, error.message));
   }
 };
-

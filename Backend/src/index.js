@@ -10,12 +10,16 @@ import connectDB from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
 import channelSocketHandler from './controllers/channelSocketController.js';
 import messageSocketHandler from './controllers/messageSocketController.js';
-import apiRouter from './routes/apiRoutes.js';
 import { verifyEmailController } from './controllers/userController.js';
+import apiRouter from './routes/apiRoutes.js';
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*'
+  }
+});
 
 app.use(cors());
 
@@ -31,7 +35,6 @@ app.use('/ui', bullServerAdapter.getRouter());
 app.use('/api', apiRouter);
 
 app.get('/verify/:token', verifyEmailController);
-
 
 app.get('/ping', (req, res) => {
   return res.status(StatusCodes.OK).json({ message: 'Pong', success: true });

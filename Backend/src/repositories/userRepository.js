@@ -1,10 +1,9 @@
-import { sign } from 'crypto';
 import User from '../schema/user.js';
 import crudRepository from './crudRepository.js';
 
 const userRepository = {
   ...crudRepository(User),
-  signUpUser : async function (data) {
+  signUpUser: async function (data) {
     const user = new User(data);
     await user.save();
     return user;
@@ -21,7 +20,7 @@ const userRepository = {
   getByToken: async function (token) {
     const user = await User.findOne({ verificationToken: token });
     return user;
-  },
+  }
 };
 
 export default userRepository;

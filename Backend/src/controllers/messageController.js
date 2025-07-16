@@ -13,10 +13,12 @@ export const getMessagesController = async (req, res) => {
       {
         channelId: req.params.channelId
       },
-      req.query.page || 5,
+      req.query.page || 1,
       req.query.limit || 20,
       req.user
     );
+    console.log("response is ->" , response);
+    
     return res
       .status(StatusCodes.OK)
       .json(successResponse(response, 'Messages fetched successfully'));

@@ -11,6 +11,6 @@ router.use('/users', userRouter);
 router.use('/workspaces', workspaceRouter);
 router.use('/channels', channelRouter);
 router.use('/members', memberRouter);
-router.use('/message', messageRouter);
+router.use('/messages', messageRouter);
 
 export default router;
