@@ -6,22 +6,19 @@ import crudRepository from './crudRepository.js';
 const messageRepository = {
   ...crudRepository(Message),
   getPaginatedMessage : async function (messageParams, page, limit) {
-  const filter = {
-    ...messageParams,
-    channelId: new mongoose.Types.ObjectId(messageParams.channelId) // this must come AFTER the spread
-  };
+    const filter = {
+      ...messageParams,
+      channelId: new mongoose.Types.ObjectId(messageParams.channelId) // this must come AFTER the spread
+    };
 
-  console.log("Message Query Filter:", filter);
+    const messages = await Message.find(filter)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate('senderId', 'username email avatar')
+      .populate('channelId', 'name');
 
-
-  const messages = await Message.find(filter)
-    .sort({ createdAt: -1 })
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .populate('senderId', 'username email avatar')
-    .populate('channelId', 'name');
-
-  return messages;
+    return messages;
   }
 };
 

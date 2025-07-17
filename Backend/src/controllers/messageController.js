@@ -17,8 +17,7 @@ export const getMessagesController = async (req, res) => {
       req.query.limit || 20,
       req.user
     );
-    console.log("response is ->" , response);
-    
+
     return res
       .status(StatusCodes.OK)
       .json(successResponse(response, 'Messages fetched successfully'));

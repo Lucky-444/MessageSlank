@@ -11,6 +11,7 @@ import { PORT } from './config/serverConfig.js';
 import channelSocketHandler from './controllers/channelSocketController.js';
 import messageSocketHandler from './controllers/messageSocketController.js';
 import { verifyEmailController } from './controllers/userController.js';
+import userSocketHandler from './controllers/userSocketHandler.js';
 import apiRouter from './routes/apiRoutes.js';
 
 const app = express();
@@ -41,6 +42,7 @@ app.get('/ping', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+  userSocketHandler(io, socket);
   messageSocketHandler(io, socket);
   channelSocketHandler(io, socket);
 });

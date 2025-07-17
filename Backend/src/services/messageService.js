@@ -44,8 +44,6 @@ export const getMessagesService = async (
       limit
     );
 
-    console.log("messages ->" , messages);
-    
     return messages;
   } catch (error) {
     console.log('get messages service error', error);
