@@ -5,7 +5,7 @@ import crudRepository from './crudRepository.js';
 
 const messageRepository = {
   ...crudRepository(Message),
-  getPaginatedMessage : async function (messageParams, page, limit) {
+  getPaginatedMessage: async function (messageParams, page, limit) {
     const filter = {
       ...messageParams,
       channelId: new mongoose.Types.ObjectId(messageParams.channelId) // this must come AFTER the spread

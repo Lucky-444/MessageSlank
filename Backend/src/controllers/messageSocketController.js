@@ -10,6 +10,8 @@ export default function messageHandler(io, socket) {
     async function createMessageSocketHandler(data, cb) {
       const { channelId } = data;
       const messageResponse = await createMessageService(data);
+      console.log('message Response ->', messageResponse);
+
       console.log('Channel ---> ', channelId);
 
       io.to(channelId).emit(NEW_MESSAGE_RECEVIED_EVENT, messageResponse);

@@ -8,7 +8,17 @@ import { isUserMemberOfTheWorkspace } from './workspaceService.js';
 export const createMessageService = async (message) => {
   try {
     const newMessage = await messageRepository.create(message);
-    return newMessage;
+     // 👇 Populate senderId and optionally channelId for frontend UI
+    const populatedMessage = await newMessage.populate([
+      { path: 'senderId', select: 'username avatar email' },
+      { path: 'channelId', select: 'name' }
+    ]);
+
+    // Convert to plain JS object to ensure all fields, including timestamps, are visible
+    const messageObj = populatedMessage.toObject();
+    console.log("messageObject is ->" , messageObj);
+    
+    return messageObj;
   } catch (error) {
     console.log('createMessageService error', error);
     throw error;
